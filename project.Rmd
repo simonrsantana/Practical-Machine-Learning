@@ -43,7 +43,7 @@ library(reprtree)
 ```
 
 Now, import the data from the URL's and load them from the local directory
-```{r load, warning=F, message=F, cache = T}
+```{r load, warning=F, message=F, cache = F}
 # Download the files in case they are not available in the working directory
 if (!file.exists("trainPML.csv")){
       trainURL <- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv"
@@ -57,7 +57,7 @@ test <- read.csv("testPML.csv", na.strings = c("NA", "", "#DIV/0!"), header = T)
 ```
 
 If we take a look to the dataset it is easy to recognize that it can easily be simplified by removing some of the less important variables, as well as the variables with lots of NA values or the low-variance-ones
-```{r clean, warning=F, message=F, cache = T}
+```{r clean, warning=F, message=F, cache = F}
 # Remove the first seven columns, which have very little predicting power on "classe"
 train <- train[,-c(1:7)]
 test <- test[,-c(1:7)]
@@ -86,7 +86,7 @@ Now that the data has been cleansed we can fit some of the models that have been
 
 ### Classification trees
 Here we will consider 10-fold cross validation. To this end we introduce the "trainControl" function previous to the construction of the model
-```{r class_tree, warning=F, message=F, cache = T}
+```{r class_tree, warning=F, message=F, cache = F}
 execution <- trainControl(method = "cv", number = 10)      # 10-fold cross validation
 classTrees <- train(classe ~ ., data = train, method = "rpart", trControl = execution)
 classTrees          # See explicitly the model constructed
@@ -95,7 +95,7 @@ fancyRpartPlot(classTrees$finalModel)
 
 We can also take a look at the predictions made by this model and the confusion matrix associated
 
-```{r classTreesPred, warning=F, message=F, cache = T}
+```{r classTreesPred, warning=F, message=F, cache = F}
 classTreesPred <- predict(classTrees, valid)
 cmtree <- confusionMatrix(classTreesPred, valid$classe)
 
@@ -117,7 +117,7 @@ ggplot(data =  clasTreesConfusion, mapping = aes(x = Prediction, y = Reference))
 
 #### Predictions on the test set
 Taking into account the accuracy of this method, the predictions produced for the test set are:
-```{r classTreesPredFinal, warning=F, message=F, cache = T}
+```{r classTreesPredFinal, warning=F, message=F, cache = F}
 finalClassPred <- predict(classTrees, test)       # Test set predictions
 finalClassPred
 ```
@@ -126,7 +126,7 @@ finalClassPred
 ### Random Forest
 
 We perform the same process as in classification trees but for Random Forests
-```{r RF, warning=F, message=F, cache=T}
+```{r RF, warning=F, message=F, cache=F}
 RF <- randomForest(classe ~ ., data=train)
 RF                  # See explicitly the Random Forest results
 
@@ -154,7 +154,7 @@ The accuracy for RF is far better than the one obtained for the Classification T
 #### Predictions on the test set
 
 The predictions using Random Forest in the test set are the following:
-```{r RFpredFinal, warning=F, message=F, cache = T}
+```{r RFpredFinal, warning=F, message=F, cache = F}
 finalRFpred <- predict(RF, test)       # Test set predictions
 finalRFpred
 ```
