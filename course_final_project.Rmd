@@ -1,8 +1,10 @@
 ---
 title: "Simon Rodriguez"
 author: "Practical Machine Learning - Final project"
-date: "8th of September, 2017"
-output: html_document
+date: "13th of September, 2017"
+output: 
+      html_document:
+      keep_md: true
 ---
 
 
